@@ -1,0 +1,11 @@
+FROM node
+
+WORKDIR /var/node/
+
+RUN npm install
+
+COPY . ./var/node
+
+EXPOSE 3000
+
+CMD [ "node", "./bin/www" ]
