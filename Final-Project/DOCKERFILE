@@ -1,6 +1,7 @@
 FROM node
 
-WORKDIR /var/node/
+
+WORKDIR /usr/src/node-getting-started	
 
 COPY package*.json ./
 RUN npm install
