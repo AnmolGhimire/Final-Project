@@ -1,0 +1,65 @@
+pipeline{
+    agent any
+    stages{
+        stage('create webapp image'){
+            steps{
+              
+                echo "building docker image"
+                sh '''
+                original_pwd=$(pwd -P)
+                
+                docker build -t docanmol/project:$BUILD_NUMBER .
+                docker push docanmol/project:$BUILD_NUMBER
+                cd $original_pwd
+                sh '''
+            }
+
+        }
+        
+        }
+        stage("deploy to production"){
+            steps{
+                timeout(time:1,unit:'DAYS'){
+                input message:'Approve PRODUCTION deployment?'
+                }
+                echo "running in production env"
+                sh '''
+                docker container stop app || true
+                docker container rm app || true
+                docker run -itd --name app -p 8087:8080 docanmol/project:$BUILD_NUMBER /bin/bash
+                sh '''
+            }
+        }
+    }
+    post {
+        always {
+            mail to: 'harikamai1011@gmail.com',
+            subject: "Job '${JOB_NAME}' (${BUILD_NUMBER}) is waiting for input",
+            body: "Please go to ${BUILD_URL} and verify the build"
+        }
+        success {
+            mail bcc: 'harikamai1011@gmail.com', body: """Hi Team,
+
+Build #$BUILD_NUMBER is successful, please go through the url
+
+$BUILD_URL
+
+and verify the details.
+
+Regards,
+DevOps Team""", cc: '', from: '', replyTo: '', subject: 'BUILD SUCCESS NOTIFICATION', to: 'harikamai1011@gmail.com'
+        }
+        failure {
+            mail bcc: 'harikamai1011@gmail.com', body: """Hi Team,
+
+Build #$BUILD_NUMBER is unsuccessful, please go through the url
+
+$BUILD_URL
+
+and verify the details.
+
+Regards,
+DevOps Team""", cc: '', from: '', replyTo: '', subject: 'BUILD FAILED NOTIFICATION', to: 'harikamai1011@gmail.com'
+        }
+    }
+}
