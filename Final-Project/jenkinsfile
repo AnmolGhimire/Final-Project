@@ -7,7 +7,7 @@ pipeline{
                 echo "building docker image"
                 sh '''
                 original_pwd=$(pwd -P)
-                cd Final-Project/Final-Project
+                cd Final-Project/
                 
                 docker build -t docanmol/project:$BUILD_NUMBER .
                 docker push docanmol/project:$BUILD_NUMBER
