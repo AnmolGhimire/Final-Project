@@ -2,9 +2,10 @@ FROM node
 
 WORKDIR /var/node/
 
+COPY package*.json ./
 RUN npm install
 
-COPY . ./var/node
+COPY . .
 
 EXPOSE 3000
 
