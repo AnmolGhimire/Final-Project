@@ -16,7 +16,7 @@ pipeline{
 
         }
         
-        }
+        
         stage('deploy to production'){
             steps{
                 timeout(time:1,unit:'DAYS'){
@@ -31,6 +31,7 @@ pipeline{
             }
         }
     }
+}
     post {
         always {
             mail to: 'harikamai1011@gmail.com',
@@ -61,5 +62,5 @@ and verify the details.
 Regards,
 DevOps Team""", cc: '', from: '', replyTo: '', subject: 'BUILD FAILED NOTIFICATION', to: 'harikamai1011@gmail.com'
         }
-    
 }
+
