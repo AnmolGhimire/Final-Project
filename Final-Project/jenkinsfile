@@ -32,7 +32,7 @@ pipeline{
             }
         }
     }
-}
+
     post {
         always {
             mail to: 'harikamai1011@gmail.com',
