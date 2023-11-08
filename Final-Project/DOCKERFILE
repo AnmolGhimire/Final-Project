@@ -4,7 +4,7 @@ WORKDIR /var/node/
 
 RUN npm install
 
-COPY . ./var/node
+COPY .  /var/node
 
 EXPOSE 3000
 
